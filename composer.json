@@ -1,0 +1,27 @@
+{
+  "name": "dol-lab/spaces-fhnw-features",
+  "type": "wordpress-plugin",
+  "description": "FHNW specific customizations for the Spaces install.",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Silvan Hagen",
+      "email": "silvan@silvanhagen.com",
+      "homepage": "https://silvanhagen.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.1"
+  },
+  "autoload": {
+    "files": [
+      "inc/namespace.php"
+    ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
