@@ -13,6 +13,7 @@ namespace Spaces\FHNW;
 function bootstrap() {
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\add_styling_updates', 100 );
 	add_action( 'customize_register', __NAMESPACE__ . '\add_customizer_css_feature', 100 );
+	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\disable_block_editor_fullscreen', 100 );
 }
 
 /**
@@ -61,4 +62,16 @@ function add_customizer_css_feature( $wp_customize ) {
 			'description_hidden' => true,
 		)
 	);
+}
+
+/**
+ * Disable Block Editor fullscreen mode.
+ *
+ * @since 1.1.0
+ */
+function disable_block_editor_fullscreen() {
+	if ( is_admin() ) {
+		$script = "jQuery( window ).load(function() { const isFullscreenMode = wp.data.select( 'core/edit-post' ).isFeatureActive( 'fullscreenMode' ); if ( isFullscreenMode ) { wp.data.dispatch( 'core/edit-post' ).toggleFeature( 'fullscreenMode' ); } });";
+		wp_add_inline_script( 'wp-blocks', $script );
+	}
 }
