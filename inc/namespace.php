@@ -14,6 +14,7 @@ function bootstrap() {
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\add_styling_updates', 100 );
 	add_action( 'customize_register', __NAMESPACE__ . '\add_customizer_css_feature', 100 );
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\disable_block_editor_fullscreen', 100 );
+	add_action( 'init', __NAMESPACE__ . '\restore_admin_bar', 100 );
 }
 
 /**
@@ -39,6 +40,16 @@ function add_styling_updates() {
 
 		.grid-container {
 			max-width: 80rem;
+		}
+
+		.admin-bar .main-menu {
+			margin-top: 32px;
+		}
+
+		@media screen and (max-width: 800px) {
+			.admin-bar .main-menu {
+				margin-top: 46px;
+			}
 		}
 	'
 	);
@@ -75,3 +86,13 @@ function disable_block_editor_fullscreen() {
 		wp_add_inline_script( 'wp-blocks', $script );
 	}
 }
+
+/**
+ * Restore admin bar for super admins.
+ *
+ * @since 1.2.0
+ */
+function restore_admin_bar() {
+	add_action( 'show_admin_bar', 'is_super_admin', 100 );
+}
+
