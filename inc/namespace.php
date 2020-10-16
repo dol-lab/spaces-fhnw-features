@@ -15,6 +15,7 @@ function bootstrap() {
 	add_action( 'customize_register', __NAMESPACE__ . '\add_customizer_css_feature', 100 );
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\disable_block_editor_fullscreen', 100 );
 	add_action( 'init', __NAMESPACE__ . '\restore_admin_bar', 100 );
+	add_filter( 'rest_page_query', __NAMESPACE__ . '\page_attributes_fix', 10, 2 );
 }
 
 /**
@@ -101,15 +102,23 @@ function restore_admin_bar() {
  *
  * Todo: Remove once https://core.trac.wordpress.org/ticket/46294 is fixed in core.
  *
+ * @param array            $args request args.
+ * @param \WP_REST_Request $request current request object.
+ *
+ * @return array $args altered request args.
+ *
  * @since 1.3.0
  */
-add_filter( 'rest_page_query', function( $args, $request ) {
+function page_attributes_fix( $args, $request ) {
 	if (
 		isset( $args['orderby'] ) &&
 		is_string( $args['orderby'] ) &&
 		'menu_order' === $args['orderby']
 	) {
-		$args['orderby'] = [ 'menu_order' => 'ASC', 'ID' => 'ASC' ];
+		$args['orderby'] = array(
+			'menu_order' => 'ASC',
+			'ID'         => 'ASC',
+		);
 	}
 	return $args;
-}, 10, 2 );
+}
