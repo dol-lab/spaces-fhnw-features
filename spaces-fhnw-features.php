@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-fhnw-features
  * Domain Path:     /languages
- * Version:         1.2.0
+ * Version:         1.3.0
  *
  * @package         Spaces_Fhnw_Features
  */

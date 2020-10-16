@@ -96,3 +96,20 @@ function restore_admin_bar() {
 	add_action( 'show_admin_bar', 'is_super_admin', 100 );
 }
 
+/**
+ * Fix for https://github.com/dol-lab/spaces-partners/issues/37
+ *
+ * Todo: Remove once https://core.trac.wordpress.org/ticket/46294 is fixed in core.
+ *
+ * @since 1.3.0
+ */
+add_filter( 'rest_page_query', function( $args, $request ) {
+	if (
+		isset( $args['orderby'] ) &&
+		is_string( $args['orderby'] ) &&
+		'menu_order' === $args['orderby']
+	) {
+		$args['orderby'] = [ 'menu_order' => 'ASC', 'ID' => 'ASC' ];
+	}
+	return $args;
+}, 10, 2 );
