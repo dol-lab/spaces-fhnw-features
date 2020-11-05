@@ -16,6 +16,12 @@ function bootstrap() {
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\disable_block_editor_fullscreen', 100 );
 	add_action( 'init', __NAMESPACE__ . '\restore_admin_bar', 100 );
 	add_filter( 'rest_page_query', __NAMESPACE__ . '\page_attributes_fix', 10, 2 );
+	/**
+	 * Allow unprotected events feeds.
+	 *
+	 * @see https://github.com/dol-lab/spaces-partners/issues/36
+	 */
+	add_filter( 'spaces.more-privacy-options.allow-event-feeds', '__return_true' );
 }
 
 /**
