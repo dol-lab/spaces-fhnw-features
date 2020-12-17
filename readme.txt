@@ -3,13 +3,16 @@ Contributors: neverything
 Requires at least: 5.2
 Tested up to: 5.5
 Requires PHP: 7.1
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 FHNW specific customizations for the Spaces install.
 
 == Changelog ==
+
+= 1.4.0 =
+* Refactor event feed filter, see https://github.com/dol-lab/more-privacy-options/pull/1
 
 = 1.3.1 =
 * Refactor feature from 1.3.0

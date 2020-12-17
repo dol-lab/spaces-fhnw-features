@@ -21,7 +21,7 @@ function bootstrap() {
 	 *
 	 * @see https://github.com/dol-lab/spaces-partners/issues/36
 	 */
-	add_filter( 'spaces.more-privacy-options.allow-event-feeds', '__return_true' );
+	add_filter( 'more_privacy_allow_feeds', __NAMESPACE__ . '\allow_event_feeds', 10, 2 );
 }
 
 /**
@@ -127,4 +127,22 @@ function page_attributes_fix( $args, $request ) {
 		);
 	}
 	return $args;
+}
+
+/**
+ * Allow Events feeds to be consumed without login.
+ *
+ * @param bool   $status defaults to false, so feeds need login.
+ * @param string $feed Exposes $wp->query_vars['feed'] value.
+ *
+ * @return bool $status
+ *
+ * @since 1.4.0
+ */
+function allow_event_feeds( $status, $feed ) {
+	if ( 'eo-events' === $feed ) {
+		$status = true;
+	}
+
+	return $status;
 }
