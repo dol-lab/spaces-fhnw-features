@@ -13,7 +13,15 @@ namespace Spaces\FHNW;
 function bootstrap() {
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\add_styling_updates', 100 );
 	add_action( 'customize_register', __NAMESPACE__ . '\add_customizer_css_feature', 100 );
+
+	/**
+	 * Removing unused action from the default theme.
+	 *
+	 * @see https://github.com/dol-lab/spaces-partners/issues/15#issuecomment-753957157
+	 */
+	add_action( 'init', __NAMESPACE__ . '\remove_unused_fullscreen_script' );
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\disable_block_editor_fullscreen', 100 );
+
 	add_action( 'init', __NAMESPACE__ . '\restore_admin_bar', 100 );
 	add_filter( 'rest_page_query', __NAMESPACE__ . '\page_attributes_fix', 10, 2 );
 	/**
@@ -60,6 +68,23 @@ function add_styling_updates() {
 		}
 	'
 	);
+	/**
+	 * Fix admin bar position on the /public space theme.
+	 */
+	wp_add_inline_style(
+		'spaces-structure',
+		'
+		.admin-bar .main-menu {
+			margin-top: 32px;
+		}
+
+		@media screen and (max-width: 800px) {
+			.admin-bar .main-menu {
+				margin-top: 46px;
+			}
+		}
+	'
+	);
 }
 
 /**
@@ -89,9 +114,25 @@ function add_customizer_css_feature( $wp_customize ) {
  */
 function disable_block_editor_fullscreen() {
 	if ( is_admin() ) {
-		$script = "jQuery( window ).load(function() { const isFullscreenMode = wp.data.select( 'core/edit-post' ).isFeatureActive( 'fullscreenMode' ); if ( isFullscreenMode ) { wp.data.dispatch( 'core/edit-post' ).toggleFeature( 'fullscreenMode' ); } });";
+		$script = "
+			jQuery( window ).load(function() {
+				const isFullscreenMode = wp.data.select( 'core/edit-post' ).isFeatureActive( 'fullscreenMode' );
+				if ( isFullscreenMode ) {
+					wp.data.dispatch( 'core/edit-post' ).toggleFeature( 'fullscreenMode' );
+				}
+			});
+		";
 		wp_add_inline_script( 'wp-blocks', $script );
 	}
+}
+
+/**
+ * Remove unused fullscreen script from default theme.
+ *
+ * @since 1.5.0
+ */
+function remove_unused_fullscreen_script() {
+	remove_action( 'enqueue_block_editor_assets', 'spaces_fullscreen_editor' );
 }
 
 /**
